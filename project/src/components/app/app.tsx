@@ -9,19 +9,18 @@ import PlayerScreen from '../../pages/player-screen/player-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import PrivateRoute from '../private-route/private-route';
+import { FilmInfo } from '../../const';
 
 type Props = {
-  title: string;
-  genre: string;
-  year: number;
+  filmInfo: FilmInfo;
 }
 
 const App: FC<Props> = (props) => {
-  const { title, genre, year } = props;
+  const { filmInfo } = props;
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoute.Main} element={<MainScreen title={title} genre={genre} year={year} />} />
+        <Route path={AppRoute.Main} element={<MainScreen filmInfo={filmInfo} />} />
         <Route
           path={AppRoute.MyList}
           element={
