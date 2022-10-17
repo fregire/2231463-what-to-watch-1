@@ -1,14 +1,13 @@
-import FilmCard from '../../components/film-card/film-card';
 import { FC } from 'react';
+import FilmCard from '../../components/film-card/film-card';
+import { FilmInfo } from '../../const';
 
 type Props = {
-  title: string;
-  genre: string;
-  year: number;
+  filmInfo: FilmInfo;
 }
 
 const MainScreen: FC<Props> = (props) => {
-  const { title, genre, year } = props;
+  const { filmInfo } = props;
   return (
     <>
       <section className="film-card">
@@ -54,10 +53,10 @@ const MainScreen: FC<Props> = (props) => {
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{title}</h2>
+              <h2 className="film-card__title">{filmInfo.title}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{year}</span>
+                <span className="film-card__genre">{filmInfo.genre}</span>
+                <span className="film-card__year">{filmInfo.year}</span>
               </p>
 
               <div className="film-card__buttons">
