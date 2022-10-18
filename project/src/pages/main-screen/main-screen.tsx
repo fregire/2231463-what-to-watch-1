@@ -1,13 +1,15 @@
 import { FC } from 'react';
-import FilmCard from '../../components/film-card/film-card';
+import FilmsList from '../../components/films-list/films-list';
 import { FilmInfo } from '../../const';
+import { Film } from '../../types/film';
 
 type Props = {
   filmInfo: FilmInfo;
+  films: Film[];
 }
 
 const MainScreen: FC<Props> = (props) => {
-  const { filmInfo } = props;
+  const { filmInfo, films } = props;
   return (
     <>
       <section className="film-card">
@@ -115,9 +117,7 @@ const MainScreen: FC<Props> = (props) => {
             </li>
           </ul>
 
-          <div className="catalog__films-list">
-            {Array.from(Array(20), (_, key) => <FilmCard key={key} />)}
-          </div>
+          <FilmsList films={films} />
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
