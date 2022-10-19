@@ -112,6 +112,6 @@ root.render(
         </symbol>
       </svg>
     </div>
-    <App filmInfo={{title: 'The Grand Budapest Hotel', genre: 'Drama', year: 2014}} films={films} />
+    <App promoFilm={films[0]} films={films} />
   </React.StrictMode>,
 );

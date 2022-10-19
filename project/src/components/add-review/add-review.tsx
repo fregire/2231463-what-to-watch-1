@@ -1,31 +1,31 @@
-import { FC, useState, Fragment } from 'react';
+import { FC, useState } from 'react';
+import RatingStar from './rating-star';
+
+const MAX_RATING = 10;
 
 const AddReviewForm: FC = () => {
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0);
-  const MAX_RATING = 10;
 
   const handleReviewTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(e.target.value);
   };
 
-  const handleRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const ratingInt = parseInt(e.target.value, 10);
-    setRating(ratingInt);
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating);
   };
 
-  const renderRating = (_rating: number) => {
-    const ratingStr = _rating.toString();
-    const isCurrentRatingChosen = _rating === rating;
-    return (
-      <Fragment key={_rating}>
-        <input className="rating__input" checked={isCurrentRatingChosen} onChange={handleRatingChange} id={`star-${ratingStr}`} type="radio" name="rating" value={ratingStr} />
-        <label className="rating__label" htmlFor={`star-${ratingStr}`}>Rating {ratingStr}</label>
-      </Fragment>
+  const ratings: JSX.Element[] = [...Array(MAX_RATING)] // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+    .map((_, idx) =>
+      (
+        <RatingStar
+          key={idx} // eslint-disable-line react/no-array-index-key
+          score={idx + 1}
+          isChosen={rating === (idx + 1)}
+          onChange={handleRatingChange}
+        />
+      )
     );
-  };
-
-  const ratings: JSX.Element[] = [...Array(MAX_RATING)].map((_, idx) => renderRating(idx + 1)).reverse(); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 
   return (
     <div className="add-review">

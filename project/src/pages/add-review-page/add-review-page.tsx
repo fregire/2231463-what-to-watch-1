@@ -6,14 +6,14 @@ type Props = {
   film: Film;
 }
 
-const AddReviewScreen: FC<Props> = (props) => {
-  const {film} = props;
+const AddReviewPage: FC<Props> = (props) => {
+  const { film } = props;
 
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src={film.previewImg} alt={film.title} />
+          <img src={film.backgroundImage} alt={film.name} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -30,7 +30,7 @@ const AddReviewScreen: FC<Props> = (props) => {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <a href="film-page.html" className="breadcrumbs__link">{film.title}</a>
+                <a href="film-page.html" className="breadcrumbs__link">{film.name}</a>
               </li>
               <li className="breadcrumbs__item">
                 <a className="breadcrumbs__link">Add review</a>
@@ -51,7 +51,7 @@ const AddReviewScreen: FC<Props> = (props) => {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+          <img src={film.posterImage} alt={film.name} width="218" height="327" />
         </div>
       </div>
 
@@ -60,4 +60,4 @@ const AddReviewScreen: FC<Props> = (props) => {
   );
 };
 
-export default AddReviewScreen;
+export default AddReviewPage;

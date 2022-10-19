@@ -2,13 +2,12 @@ import { FC } from 'react';
 import { Film } from '../../types/film';
 import FilmsList from '../../components/films-list/films-list';
 
-
 type Props = {
   films: Film[];
 }
 
-const MyListScreen: FC<Props> = (props) => {
-  const {films} = props;
+const MyListPage: FC<Props> = (props) => {
+  const { films } = props;
 
   return (
     <div className="user-page">
@@ -57,4 +56,4 @@ const MyListScreen: FC<Props> = (props) => {
   );
 };
 
-export default MyListScreen;
+export default MyListPage;

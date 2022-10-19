@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { Film } from '../../types/film';
 import { getFilmUrl } from '../../utils';
-import {Link} from 'react-router-dom';
 
 type Props = {
   film: Film;
@@ -9,7 +9,7 @@ type Props = {
 }
 
 const FilmCard: FC<Props> = (props) => {
-  const {film, onMouseOver} = props;
+  const { film, onMouseOver } = props;
 
   return (
     <article
@@ -20,8 +20,8 @@ const FilmCard: FC<Props> = (props) => {
     >
       <div className="small-film-card__image">
         <img
-          src={film.previewImg}
-          alt={film.title}
+          src={film.previewImage}
+          alt={film.name}
           width="280"
           height="175"
         />
@@ -31,7 +31,7 @@ const FilmCard: FC<Props> = (props) => {
           to={getFilmUrl(film)}
           className="small-film-card__link"
         >
-          {film.title}
+          {film.name}
         </Link>
       </h3>
     </article>
