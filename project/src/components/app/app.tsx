@@ -10,14 +10,16 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import PrivateRoute from '../private-route/private-route';
 import { Film } from '../../types/film';
+import { Review } from '../../types/review';
 
 type Props = {
   promoFilm: Film;
   films: Film[];
+  reviews: Review[];
 }
 
 const App: FC<Props> = (props) => {
-  const { promoFilm, films } = props;
+  const { promoFilm, films, reviews } = props;
 
   return (
     <BrowserRouter>
@@ -32,7 +34,7 @@ const App: FC<Props> = (props) => {
           }
         />
         <Route path={AppRoute.SignIn} element={<SignInPage />} />
-        <Route path={AppRoute.Film} element={<MoviePage film={films[0]} films={films} />} />
+        <Route path={AppRoute.Film} element={<MoviePage film={films[0]} films={films} reviews={reviews} />} />
         <Route path={AppRoute.AddReview} element={<AddReviewPage film={films[0]}/>} />
         <Route path={AppRoute.Player} element={<PlayerPage film={films[0]} />} />
         <Route path={AppRoute.Default} element={<NotFoundPage />} />
