@@ -1,39 +1,41 @@
 import { FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainScreen from '../../pages/main-screen/main-screen';
-import MyListScreen from '../../pages/my-list-screen/my-list-screen';
-import SignInScreen from '../../pages/sign-in-screen/sign-in-screen';
-import MovieScreen from '../../pages/movie-screen/movie-screen';
-import AddReviewScreen from '../../pages/add-review-screen/add-review-screen';
-import PlayerScreen from '../../pages/player-screen/player-screen';
-import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
+import MainPage from '../../pages/main-page/main-page';
+import MyListPage from '../../pages/my-list-page/my-list-page';
+import SignInPage from '../../pages/sign-in-page/sign-in-page';
+import MoviePage from '../../pages/movie-page/movie-page';
+import AddReviewPage from '../../pages/add-review-page/add-review-page';
+import PlayerPage from '../../pages/player-page/player-page';
+import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import PrivateRoute from '../private-route/private-route';
-import { FilmInfo } from '../../const';
+import { Film } from '../../types/film';
 
 type Props = {
-  filmInfo: FilmInfo;
+  promoFilm: Film;
+  films: Film[];
 }
 
 const App: FC<Props> = (props) => {
-  const { filmInfo } = props;
+  const { promoFilm, films } = props;
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoute.Main} element={<MainScreen filmInfo={filmInfo} />} />
+        <Route path={AppRoute.Main} element={<MainPage promoFilm={promoFilm} films={films} />} />
         <Route
           path={AppRoute.MyList}
           element={
             <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-              <MyListScreen />
+              <MyListPage films={films} />
             </PrivateRoute>
           }
         />
-        <Route path={AppRoute.SignIn} element={<SignInScreen />} />
-        <Route path={AppRoute.Film} element={<MovieScreen />} />
-        <Route path={AppRoute.AddReview} element={<AddReviewScreen />} />
-        <Route path={AppRoute.Player} element={<PlayerScreen />} />
-        <Route path={AppRoute.Default} element={<NotFoundScreen />} />
+        <Route path={AppRoute.SignIn} element={<SignInPage />} />
+        <Route path={AppRoute.Film} element={<MoviePage film={films[0]} films={films} />} />
+        <Route path={AppRoute.AddReview} element={<AddReviewPage film={films[0]}/>} />
+        <Route path={AppRoute.Player} element={<PlayerPage film={films[0]} />} />
+        <Route path={AppRoute.Default} element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

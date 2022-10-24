@@ -13,9 +13,3 @@ export enum AuthorizationStatus {
     NoAuth = 'NO_AUTH',
     Unknown = 'UNKNOWN'
 }
-
-export type FilmInfo = {
-    title: string;
-    genre: string;
-    year: number;
-}
