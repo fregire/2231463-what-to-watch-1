@@ -1,14 +1,17 @@
 import { FC } from 'react';
 import { Film } from '../../types/film';
+import { Review } from '../../types/review';
 import FilmsList from '../../components/films-list/films-list';
+import MovieTabs from '../../components/movie-tabs/movie-tabs';
 
 type Props = {
   film: Film;
   films: Film[];
+  reviews: Review[];
 }
 
 const MoviePage: FC<Props> = (props) => {
-  const { film, films } = props;
+  const { film, films, reviews } = props;
 
   return (
     <>
@@ -75,37 +78,7 @@ const MoviePage: FC<Props> = (props) => {
               <img src={film.posterImage} alt={film.name} width="218" height="327" />
             </div>
 
-            <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
-
-              <div className="film-rating">
-                <div className="film-rating__score">{film.rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">{film.scoresCount} ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p>{film.description}</p>
-
-                <p className="film-card__director"><strong>Director: {film.director}</strong></p>
-
-                <p className="film-card__starring"><strong>Starring: {film.starring.join(',')} and other</strong></p>
-              </div>
-            </div>
+            <MovieTabs film={film} reviews={reviews} />
           </div>
         </div>
       </section>
@@ -114,7 +87,7 @@ const MoviePage: FC<Props> = (props) => {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList films={films.splice(0, 4)} />
+          <FilmsList films={films.filter((filmAnother) => filmAnother.genre === film.genre).splice(0, 4)} />
         </section>
 
         <footer className="page-footer">
