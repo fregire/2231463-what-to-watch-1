@@ -26,7 +26,7 @@ const VideoPlayer: FC<Props> = (props) => {
 
   }, [isPlaying]);
 
-  return <video ref={videoPlayerRef} width={width} height={height} src={src} poster={poster} muted={muted}></video>;
+  return <video ref={videoPlayerRef} width={width} height={height} src={src} poster={poster} muted={muted} />;
 };
 
 export default VideoPlayer;
