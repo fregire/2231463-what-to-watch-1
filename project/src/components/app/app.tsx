@@ -24,7 +24,7 @@ const App: FC<Props> = (props) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoute.Main} element={<MainPage promoFilm={promoFilm} films={films} />} />
+        <Route path={AppRoute.Main} element={<MainPage promoFilm={promoFilm} />} />
         <Route
           path={AppRoute.MyList}
           element={
