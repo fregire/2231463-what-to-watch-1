@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
+import ShowMore from '../../components/show-more/show-more';
 import { Film } from '../../types/film';
 import { useAppSelector } from '../../hooks';
 import { ALL_GENRES } from '../../const';
@@ -9,12 +10,21 @@ type Props = {
   promoFilm: Film;
 }
 
+const SHOWED_FILMS_STEP = 8;
+
 const MainPage: FC<Props> = (props) => {
   const { promoFilm } = props;
+  const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
   const { films, activeGenre } = useAppSelector((state) => state);
-  const genres = [ALL_GENRES].concat([...new Set(films.map((film) => film.genre))]);
+  const genres = [ALL_GENRES]
+    .concat([...new Set(films.map((film) => film.genre))]);
   const filteredFilms = films
-    .filter((film) => film.genre === activeGenre || activeGenre === ALL_GENRES);
+    .filter((film) => film.genre === activeGenre || activeGenre === ALL_GENRES)
+    .slice(0, showedFilmsCount);
+
+  const handleMoreBtnClick = () => {
+    setShowedFilmsCount(showedFilmsCount + SHOWED_FILMS_STEP);
+  };
 
   return (
     <>
@@ -94,9 +104,7 @@ const MainPage: FC<Props> = (props) => {
 
           <FilmsList films={filteredFilms} />
 
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          {filteredFilms.length % SHOWED_FILMS_STEP === 0 && <ShowMore onClick={handleMoreBtnClick}/>}
         </section>
 
         <footer className="page-footer">
