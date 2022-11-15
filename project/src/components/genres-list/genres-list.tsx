@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { changeGenre } from '../../store/action';
 
-
 type Props = {
   genres: string[];
   activeGenre: string;
