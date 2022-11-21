@@ -18,5 +18,7 @@ export const ALL_GENRES = 'All genres';
 
 
 export enum APIRoute {
-    Films = '/films'
+    Films = '/films',
+    Login = '/login',
+    Logout = '/logout'
 }
