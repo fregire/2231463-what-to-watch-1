@@ -9,17 +9,23 @@ import PlayerPage from '../../pages/player-page/player-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import PrivateRoute from '../private-route/private-route';
-import { Film } from '../../types/film';
 import { Review } from '../../types/review';
+import { useAppSelector } from '../../hooks/index';
+import Loader from '../loader/loader';
 
 type Props = {
-  promoFilm: Film;
-  films: Film[];
   reviews: Review[];
 }
 
 const App: FC<Props> = (props) => {
-  const { promoFilm, films, reviews } = props;
+  const { isDataLoaded, films } = useAppSelector((state) => state);
+  const { reviews } = props;
+
+  if (!isDataLoaded){
+    return <Loader />;
+  }
+
+  const promoFilm = films[0];
 
   return (
     <BrowserRouter>

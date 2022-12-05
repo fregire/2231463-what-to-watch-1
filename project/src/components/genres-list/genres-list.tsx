@@ -18,7 +18,7 @@ const GenreItem: FC<GenreItemProps> = (props) => {
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    dispatch(changeGenre({genre: genre}));
+    dispatch(changeGenre(genre));
   };
 
   return (
