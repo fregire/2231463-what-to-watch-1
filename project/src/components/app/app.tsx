@@ -7,7 +7,7 @@ import MoviePage from '../../pages/movie-page/movie-page';
 import AddReviewPage from '../../pages/add-review-page/add-review-page';
 import PlayerPage from '../../pages/player-page/player-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute } from '../../const';
 import PrivateRoute from '../private-route/private-route';
 import { Review } from '../../types/review';
 import { useAppSelector } from '../../hooks/index';
@@ -18,7 +18,7 @@ type Props = {
 }
 
 const App: FC<Props> = (props) => {
-  const { isDataLoaded, films } = useAppSelector((state) => state);
+  const { isDataLoaded, films, authorizationStatus } = useAppSelector((state) => state);
   const { reviews } = props;
 
   if (!isDataLoaded){
@@ -34,7 +34,7 @@ const App: FC<Props> = (props) => {
         <Route
           path={AppRoute.MyList}
           element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
+            <PrivateRoute authorizationStatus={authorizationStatus}>
               <MyListPage films={films} />
             </PrivateRoute>
           }
