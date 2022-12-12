@@ -9,17 +9,12 @@ import PlayerPage from '../../pages/player-page/player-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import { AppRoute } from '../../const';
 import PrivateRoute from '../private-route/private-route';
-import { Review } from '../../types/review';
 import { useAppSelector } from '../../hooks/index';
 import Loader from '../loader/loader';
 
-type Props = {
-  reviews: Review[];
-}
 
-const App: FC<Props> = (props) => {
+const App: FC = () => {
   const { isDataLoaded, films, authorizationStatus } = useAppSelector((state) => state);
-  const { reviews } = props;
 
   if (!isDataLoaded){
     return <Loader />;
@@ -40,7 +35,7 @@ const App: FC<Props> = (props) => {
           }
         />
         <Route path={AppRoute.SignIn} element={<SignInPage />} />
-        <Route path={AppRoute.Film} element={<MoviePage film={films[0]} films={films} reviews={reviews} />} />
+        <Route path={AppRoute.Film} element={<MoviePage />} />
         <Route path={AppRoute.AddReview} element={<AddReviewPage film={films[0]}/>} />
         <Route path={AppRoute.Player} element={<PlayerPage film={films[0]} />} />
         <Route path={AppRoute.Default} element={<NotFoundPage />} />
