@@ -1,24 +1,32 @@
 import { FC, useEffect, useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
+import { AxiosError } from 'axios';
+import { AuthorizationStatus } from '../../const';
 import { Film } from '../../types/film';
 import { Review } from '../../types/review';
 import { api } from '../../services/api';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { redirectToRoute } from '../../store/action';
+import { AppRoute } from '../../const';
 import FilmsList from '../../components/films-list/films-list';
 import MovieTabs from '../../components/movie-tabs/movie-tabs';
 import UserBlock from '../../components/user-block/user-block';
 import Logo from '../../components/logo/logo';
 import Loader from '../../components/loader/loader';
-import { AxiosError } from 'axios';
 
 const MoviePage: FC = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [film, setFilm] = useState<null | Film>(null);
   const [similarFilms, setSimilarFilms] = useState<null | Film[]>(null);
   const [reviews, setReviews] = useState<null | Review[]>(null);
+  const { authorizationStatus } = useAppSelector((state) => state);
   const { id } = useParams();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
+    window.scroll({top: 0, behavior: 'smooth'});
+
     const fetchFilm = async () => {
       const { data: filmInfo } = await api.get<Film>(`/films/${id || -1}`);
       setFilm(filmInfo);
@@ -32,16 +40,17 @@ const MoviePage: FC = () => {
       setReviews(filmReviews);
     };
 
+    setDataLoaded(false);
     fetchFilm()
       .then(() => fetchSimilarFilms())
       .then(() => fetchFilmReviews())
       .then(() => setDataLoaded(true))
       .catch((err: AxiosError) => {
-        if (err.response?.status == StatusCodes.NOT_FOUND){
-          
+        if (err.response && err.response.status === StatusCodes.NOT_FOUND) {
+          dispatch(redirectToRoute(AppRoute.NotFound));
         }
-      }); // eslint-disable-line no-console
-  }, []);
+      });
+  }, [id]);
 
   if (!dataLoaded) {
     return <Loader />;
@@ -85,7 +94,10 @@ const MoviePage: FC = () => {
                   <span>My list</span>
                   <span className="film-card__count">9</span>
                 </button>
-                <a href="add-review.html" className="btn film-card__button">Add review</a>
+                {
+                  authorizationStatus === AuthorizationStatus.Auth &&
+                  <a href={id ? `/films/${id}/review` : '#'} className="btn film-card__button">Add review</a>
+                }
               </div>
             </div>
           </div>
