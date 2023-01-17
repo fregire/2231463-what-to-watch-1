@@ -12,7 +12,7 @@ const PlayerPage: FC = () => {
   const videoPlayerRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setPlaying] = useState<boolean>(true);
 
-  const progress = () => currentTime / duration * 100;
+  const getProgress = () => currentTime / duration * 100;
   const formatTime = (time: number) => {
     const evenTime = Math.round(time);
     return new Date(evenTime * 1000).toISOString().substring(11, 19);
@@ -61,11 +61,11 @@ const PlayerPage: FC = () => {
   };
 
   const handleFullScreenClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!videoPlayerRef){
+    if (!videoPlayerRef.current){
       return;
     }
 
-    videoPlayerRef.current?.requestFullscreen();
+    videoPlayerRef.current.requestFullscreen();
   };
 
   const handleExitBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,8 +95,8 @@ const PlayerPage: FC = () => {
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time">
-            <progress className="player__progress" value={progress()} max="100"></progress>
-            <div className="player__toggler" style={{ left: `${progress()}%` }}>Toggler</div>
+            <progress className="player__progress" value={getProgress()} max="100"></progress>
+            <div className="player__toggler" style={{ left: `${getProgress()}%` }}>Toggler</div>
           </div>
           <div className="player__time-value">{formatTime(duration - currentTime)}</div>
         </div>

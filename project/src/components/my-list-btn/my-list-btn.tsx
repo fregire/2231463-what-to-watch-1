@@ -14,14 +14,11 @@ type Props = {
 
 
 const MyListBtn: FC<Props> = (props) => {
-  // const { isFavorite, filmsCount, onClick } = props;
-  const { filmId} = props;
+  const { filmId } = props;
   const { favoriteFilms, authorizationStatus } = useAppSelector((state) => state);
   const [isFavorite, setFavorite] = useState(favoriteFilms.some((film) => film.id === filmId));
 
   const dispatch = useAppDispatch();
-
-  // TODO: Add useEffect to load actual isFavorite
 
   const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

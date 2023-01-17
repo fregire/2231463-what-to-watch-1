@@ -39,31 +39,6 @@ const MainPage: FC = () => {
     dispatch(redirectToRoute(`/player/${promoFilm.id}`));
   };
 
-  // const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-
-  //   if (authorizationStatus !== AuthorizationStatus.Auth) {
-  //     dispatch(redirectToRoute(APIRoute.Login));
-  //     return;
-  //   }
-
-  //   if (!promoFilm){
-  //     return;
-  //   }
-
-  //   const changeFilmFavoriteStatus = async () => {
-  //     const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${promoFilm.id}/${promoFilm.isFavorite ? 0 : 1}`);
-
-  //     return changedFilm;
-  //   };
-
-  //   changeFilmFavoriteStatus()
-  //     .then((changedFilm) => {
-  //       setPromoFilm(changedFilm);
-  //       store.dispatch(fetchFavoriteFilms());
-  //     });
-  // };
-
   useEffect(() => {
     const fetchPromoFilm = async () => {
       const { data: actualPromoFilm } = await api.get<Film>(APIRoute.Promo);

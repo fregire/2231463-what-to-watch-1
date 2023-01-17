@@ -53,31 +53,6 @@ const MoviePage: FC = () => {
       });
   }, [id]);
 
-
-  // const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   if (authorizationStatus !== AuthorizationStatus.Auth) {
-  //     dispatch(redirectToRoute(APIRoute.Login));
-  //     return;
-  //   }
-
-  //   if (!film){
-  //     return;
-  //   }
-
-  //   const changeFilmFavoriteStatus = async () => {
-  //     const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${film.id}/${film.isFavorite ? 0 : 1}`);
-
-  //     return changedFilm;
-  //   };
-
-  //   changeFilmFavoriteStatus()
-  //     .then((changedFilm) => {
-  //       setFilm(changedFilm);
-  //       store.dispatch(fetchFavoriteFilms());
-  //     });
-  // };
-
   const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!film) {
