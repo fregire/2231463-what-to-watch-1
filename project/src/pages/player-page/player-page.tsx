@@ -7,17 +7,23 @@ import browserHistory from '../../browser-history';
 const PlayerPage: FC = () => {
   const { id } = useParams();
   const [film, setFilm] = useState<Film | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const videoPlayerRef = useRef<HTMLVideoElement | null>(null);
-  const [isPlaying, setPlaying] = useState(true);
+  const [isPlaying, setPlaying] = useState<boolean>(true);
 
-  const runPlayerIfNecessary = () => {
-    if (!videoPlayerRef) {
+  const progress = () => currentTime / duration * 100;
+  const formatTime = (time: number) => {
+    const evenTime = Math.round(time);
+    return new Date(evenTime * 1000).toISOString().substring(11, 19);
+  };
+
+  const runPlayerIfNecessary = (currIsPlaying: boolean) => {
+    if (!videoPlayerRef.current) {
       return;
     }
 
-    if (isPlaying) {
+    if (currIsPlaying) {
       videoPlayerRef.current?.play();
     } else {
       videoPlayerRef.current?.pause();
@@ -36,20 +42,18 @@ const PlayerPage: FC = () => {
     };
 
     fetchFilm();
-    runPlayerIfNecessary();
   }, []);
 
-  const handlePlayPauseButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
 
+  const handlePlayPauseButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setPlaying(!isPlaying);
 
-    runPlayerIfNecessary();
+    runPlayerIfNecessary(!isPlaying);
   };
 
+
   const handleProgress = (e: React.SyntheticEvent<HTMLVideoElement>) => {
-    // setDuration(duration - e.currentTarget.currentTime);
-    setProgress(e.currentTarget.currentTime / duration * 100);
+    setCurrentTime(e.currentTarget.currentTime);
   };
 
   const handleVideoLoaded = (e: React.SyntheticEvent<HTMLVideoElement>) => {
@@ -57,8 +61,6 @@ const PlayerPage: FC = () => {
   };
 
   const handleFullScreenClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
     if (!videoPlayerRef){
       return;
     }
@@ -67,9 +69,11 @@ const PlayerPage: FC = () => {
   };
 
   const handleExitBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
     browserHistory.back();
+  };
+
+  const handleVideoPlayerEnded = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    setPlaying(false);
   };
 
   return (
@@ -81,6 +85,8 @@ const PlayerPage: FC = () => {
         poster={film?.posterImage}
         onTimeUpdate={handleProgress}
         onLoadedData={handleVideoLoaded}
+        onEnded={handleVideoPlayerEnded}
+        autoPlay={isPlaying}
         muted
       >
       </video>
@@ -89,10 +95,10 @@ const PlayerPage: FC = () => {
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time">
-            <progress className="player__progress" value={progress} max="100"></progress>
-            <div className="player__toggler" style={{ left: `${progress}%` }}>Toggler</div>
+            <progress className="player__progress" value={progress()} max="100"></progress>
+            <div className="player__toggler" style={{ left: `${progress()}%` }}>Toggler</div>
           </div>
-          <div className="player__time-value">{duration}</div>
+          <div className="player__time-value">{formatTime(duration - currentTime)}</div>
         </div>
 
         <div className="player__controls-row">
