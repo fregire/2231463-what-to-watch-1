@@ -31,7 +31,7 @@ const App: FC = () => {
           path={AppRoute.MyList}
           element={
             <PrivateRoute authorizationStatus={authorizationStatus}>
-              <MyListPage films={films} />
+              <MyListPage />
             </PrivateRoute>
           }
         />

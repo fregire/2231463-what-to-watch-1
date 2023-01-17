@@ -6,6 +6,11 @@ import { Film } from '../../types/film';
 import { useAppSelector } from '../../hooks';
 import { ALL_GENRES } from '../../const';
 import UserBlock from '../../components/user-block/user-block';
+import MyListBtn from '../../components/my-list-btn/my-list-btn';
+import { api } from '../../services/api';
+import { APIRoute } from '../../const';
+import { store } from '../../store';
+import { fetchFavoriteFilms } from '../../store/api-actions';
 
 type Props = {
   promoFilm: Film;
@@ -14,9 +19,9 @@ type Props = {
 const SHOWED_FILMS_STEP = 8;
 
 const MainPage: FC<Props> = (props) => {
-  const { promoFilm } = props;
+  const [promoFilm, setPromoFilm] = useState(props.promoFilm);
   const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
-  const { films, activeGenre } = useAppSelector((state) => state);
+  const { films, activeGenre, favoriteFilms } = useAppSelector((state) => state);
   const genres = [ALL_GENRES]
     .concat([...new Set(films.map((film) => film.genre))]);
   const filteredFilms = films
@@ -25,6 +30,22 @@ const MainPage: FC<Props> = (props) => {
 
   const handleMoreBtnClick = () => {
     setShowedFilmsCount(showedFilmsCount + SHOWED_FILMS_STEP);
+  };
+
+  const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const changeFilmFavoriteStatus = async () => {
+      const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${promoFilm.id}/${promoFilm.isFavorite ? 0 : 1}`);
+
+      return changedFilm;
+    };
+
+    changeFilmFavoriteStatus()
+      .then((changedFilm) => {
+        setPromoFilm(changedFilm);
+        store.dispatch(fetchFavoriteFilms());
+      });
   };
 
   return (
@@ -76,13 +97,7 @@ const MainPage: FC<Props> = (props) => {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                <MyListBtn isFavorite={promoFilm.isFavorite} onClick={handleMyListClick} filmsCount={favoriteFilms.length} />
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
 import { AxiosError } from 'axios';
-import { AuthorizationStatus } from '../../const';
+import { APIRoute, AuthorizationStatus } from '../../const';
 import { Film } from '../../types/film';
 import { Review } from '../../types/review';
 import { api } from '../../services/api';
@@ -14,13 +14,16 @@ import MovieTabs from '../../components/movie-tabs/movie-tabs';
 import UserBlock from '../../components/user-block/user-block';
 import Logo from '../../components/logo/logo';
 import Loader from '../../components/loader/loader';
+import MyListBtn from '../../components/my-list-btn/my-list-btn';
+import { store } from '../../store';
+import { fetchFavoriteFilms } from '../../store/api-actions';
 
 const MoviePage: FC = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [film, setFilm] = useState<null | Film>(null);
   const [similarFilms, setSimilarFilms] = useState<null | Film[]>(null);
   const [reviews, setReviews] = useState<null | Review[]>(null);
-  const { authorizationStatus } = useAppSelector((state) => state);
+  const { authorizationStatus, favoriteFilms } = useAppSelector((state) => state);
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -51,6 +54,26 @@ const MoviePage: FC = () => {
         }
       });
   }, [id]);
+
+
+  const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!film){
+      return;
+    }
+
+    const changeFilmFavoriteStatus = async () => {
+      const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${film.id}/${film.isFavorite ? 0 : 1}`);
+
+      return changedFilm;
+    };
+
+    changeFilmFavoriteStatus()
+      .then((changedFilm) => {
+        setFilm(changedFilm);
+        store.dispatch(fetchFavoriteFilms());
+      });
+  };
 
   if (!dataLoaded) {
     return <Loader />;
@@ -87,13 +110,7 @@ const MoviePage: FC = () => {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                {film && <MyListBtn isFavorite={film.isFavorite} onClick={handleMyListClick} filmsCount={favoriteFilms.length} /> }
                 {
                   authorizationStatus === AuthorizationStatus.Auth &&
                   <a href={id ? `/films/${id}/review` : '#'} className="btn film-card__button">Add review</a>
