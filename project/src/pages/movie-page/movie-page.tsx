@@ -58,6 +58,11 @@ const MoviePage: FC = () => {
 
   const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      dispatch(redirectToRoute(APIRoute.Login));
+      return;
+    }
+
     if (!film){
       return;
     }

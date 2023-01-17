@@ -4,7 +4,7 @@ import GenresList from '../../components/genres-list/genres-list';
 import ShowMore from '../../components/show-more/show-more';
 import { Film } from '../../types/film';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { ALL_GENRES } from '../../const';
+import { ALL_GENRES, AuthorizationStatus } from '../../const';
 import UserBlock from '../../components/user-block/user-block';
 import MyListBtn from '../../components/my-list-btn/my-list-btn';
 import { api } from '../../services/api';
@@ -19,7 +19,7 @@ const SHOWED_FILMS_STEP = 8;
 const MainPage: FC = () => {
   const [promoFilm, setPromoFilm] = useState<Film | null>(null);
   const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
-  const { films, activeGenre, favoriteFilms } = useAppSelector((state) => state);
+  const { films, activeGenre, favoriteFilms, authorizationStatus } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const genres = [ALL_GENRES]
     .concat([...new Set(films.map((film) => film.genre))]);
@@ -33,6 +33,7 @@ const MainPage: FC = () => {
 
   const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     if (!promoFilm) {
       return;
     }
@@ -42,6 +43,11 @@ const MainPage: FC = () => {
 
   const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      dispatch(redirectToRoute(APIRoute.Login));
+      return;
+    }
 
     if (!promoFilm){
       return;

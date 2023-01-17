@@ -8,6 +8,7 @@ type Props = {
 const Review: FC<Props> = (props) => {
   const { review } = props;
 
+  const formatDate = (date: string) => new Date(date).toLocaleDateString('en-us', { year:'numeric', month:'long', day:'numeric'});
   return (
     <div className="review">
       <blockquote className="review__quote">
@@ -15,7 +16,7 @@ const Review: FC<Props> = (props) => {
 
         <footer className="review__details">
           <cite className="review__author">{review.user.name}</cite>
-          <time className="review__date" dateTime="2016-12-24">{review.date}</time>
+          <time className="review__date" dateTime="2016-12-24">{formatDate(review.date)}</time>
         </footer>
       </blockquote>
 
