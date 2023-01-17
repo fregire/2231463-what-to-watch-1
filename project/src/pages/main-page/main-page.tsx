@@ -4,13 +4,11 @@ import GenresList from '../../components/genres-list/genres-list';
 import ShowMore from '../../components/show-more/show-more';
 import { Film } from '../../types/film';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { ALL_GENRES, AuthorizationStatus } from '../../const';
+import { ALL_GENRES } from '../../const';
 import UserBlock from '../../components/user-block/user-block';
 import MyListBtn from '../../components/my-list-btn/my-list-btn';
 import { api } from '../../services/api';
 import { APIRoute } from '../../const';
-import { store } from '../../store';
-import { fetchFavoriteFilms } from '../../store/api-actions';
 import { redirectToRoute } from '../../store/action';
 
 
@@ -19,7 +17,7 @@ const SHOWED_FILMS_STEP = 8;
 const MainPage: FC = () => {
   const [promoFilm, setPromoFilm] = useState<Film | null>(null);
   const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
-  const { films, activeGenre, favoriteFilms, authorizationStatus } = useAppSelector((state) => state);
+  const { films, activeGenre } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const genres = [ALL_GENRES]
     .concat([...new Set(films.map((film) => film.genre))]);
@@ -41,30 +39,30 @@ const MainPage: FC = () => {
     dispatch(redirectToRoute(`/player/${promoFilm.id}`));
   };
 
-  const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  // const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
 
-    if (authorizationStatus !== AuthorizationStatus.Auth) {
-      dispatch(redirectToRoute(APIRoute.Login));
-      return;
-    }
+  //   if (authorizationStatus !== AuthorizationStatus.Auth) {
+  //     dispatch(redirectToRoute(APIRoute.Login));
+  //     return;
+  //   }
 
-    if (!promoFilm){
-      return;
-    }
+  //   if (!promoFilm){
+  //     return;
+  //   }
 
-    const changeFilmFavoriteStatus = async () => {
-      const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${promoFilm.id}/${promoFilm.isFavorite ? 0 : 1}`);
+  //   const changeFilmFavoriteStatus = async () => {
+  //     const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${promoFilm.id}/${promoFilm.isFavorite ? 0 : 1}`);
 
-      return changedFilm;
-    };
+  //     return changedFilm;
+  //   };
 
-    changeFilmFavoriteStatus()
-      .then((changedFilm) => {
-        setPromoFilm(changedFilm);
-        store.dispatch(fetchFavoriteFilms());
-      });
-  };
+  //   changeFilmFavoriteStatus()
+  //     .then((changedFilm) => {
+  //       setPromoFilm(changedFilm);
+  //       store.dispatch(fetchFavoriteFilms());
+  //     });
+  // };
 
   useEffect(() => {
     const fetchPromoFilm = async () => {
@@ -127,7 +125,7 @@ const MainPage: FC = () => {
                 </button>
                 {
                   promoFilm
-                  && <MyListBtn isFavorite={promoFilm.isFavorite} onClick={handleMyListClick} filmsCount={favoriteFilms.length} />
+                  && <MyListBtn filmId={promoFilm.id} />
                 }
               </div>
             </div>

@@ -63,6 +63,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
     dispatch(changeAuthorizationStatus(AuthorizationStatus.NoAuth));
+    dispatch(setFavoriteFilms([]));
     dropToken();
   }
 );

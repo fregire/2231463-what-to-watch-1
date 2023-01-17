@@ -6,7 +6,6 @@ import { useAppSelector } from '../../hooks';
 
 
 const MyListPage: FC = () => {
-  // const { films } = props;
   const { favoriteFilms } = useAppSelector((state) => state);
 
   return (

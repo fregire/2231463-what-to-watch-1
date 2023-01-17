@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
 import { AxiosError } from 'axios';
-import { APIRoute, AuthorizationStatus } from '../../const';
+import { AuthorizationStatus } from '../../const';
 import { Film } from '../../types/film';
 import { Review } from '../../types/review';
 import { api } from '../../services/api';
@@ -15,15 +15,13 @@ import UserBlock from '../../components/user-block/user-block';
 import Logo from '../../components/logo/logo';
 import Loader from '../../components/loader/loader';
 import MyListBtn from '../../components/my-list-btn/my-list-btn';
-import { store } from '../../store';
-import { fetchFavoriteFilms } from '../../store/api-actions';
 
 const MoviePage: FC = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [film, setFilm] = useState<null | Film>(null);
   const [similarFilms, setSimilarFilms] = useState<null | Film[]>(null);
   const [reviews, setReviews] = useState<null | Review[]>(null);
-  const { authorizationStatus, favoriteFilms } = useAppSelector((state) => state);
+  const { authorizationStatus } = useAppSelector((state) => state);
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -56,29 +54,29 @@ const MoviePage: FC = () => {
   }, [id]);
 
 
-  const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (authorizationStatus !== AuthorizationStatus.Auth) {
-      dispatch(redirectToRoute(APIRoute.Login));
-      return;
-    }
+  // const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   if (authorizationStatus !== AuthorizationStatus.Auth) {
+  //     dispatch(redirectToRoute(APIRoute.Login));
+  //     return;
+  //   }
 
-    if (!film){
-      return;
-    }
+  //   if (!film){
+  //     return;
+  //   }
 
-    const changeFilmFavoriteStatus = async () => {
-      const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${film.id}/${film.isFavorite ? 0 : 1}`);
+  //   const changeFilmFavoriteStatus = async () => {
+  //     const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${film.id}/${film.isFavorite ? 0 : 1}`);
 
-      return changedFilm;
-    };
+  //     return changedFilm;
+  //   };
 
-    changeFilmFavoriteStatus()
-      .then((changedFilm) => {
-        setFilm(changedFilm);
-        store.dispatch(fetchFavoriteFilms());
-      });
-  };
+  //   changeFilmFavoriteStatus()
+  //     .then((changedFilm) => {
+  //       setFilm(changedFilm);
+  //       store.dispatch(fetchFavoriteFilms());
+  //     });
+  // };
 
   const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -124,7 +122,7 @@ const MoviePage: FC = () => {
                   </svg>
                   <span>Play</span>
                 </button>
-                {film && <MyListBtn isFavorite={film.isFavorite} onClick={handleMyListClick} filmsCount={favoriteFilms.length} /> }
+                {film && <MyListBtn filmId={film.id} /> }
                 {
                   authorizationStatus === AuthorizationStatus.Auth &&
                   <a href={id ? `/films/${id}/review` : '#'} className="btn film-card__button">Add review</a>

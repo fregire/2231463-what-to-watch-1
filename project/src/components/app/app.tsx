@@ -21,7 +21,6 @@ const App: FC = () => {
     return <Loader />;
   }
 
-
   return (
     <HsitoryRouter history={browserHistory}>
       <Routes>
