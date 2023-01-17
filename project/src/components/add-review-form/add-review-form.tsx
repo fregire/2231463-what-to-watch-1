@@ -39,7 +39,8 @@ const AddReviewForm: FC<Props> = (props) => {
           onChange={handleRatingChange}
         />
       )
-    );
+    )
+    .reverse();
 
   return (
     <div className="add-review">

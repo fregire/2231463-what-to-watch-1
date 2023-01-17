@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
 import { AxiosError } from 'axios';
 import { AuthorizationStatus } from '../../const';
@@ -14,6 +14,7 @@ import MovieTabs from '../../components/movie-tabs/movie-tabs';
 import UserBlock from '../../components/user-block/user-block';
 import Logo from '../../components/logo/logo';
 import Loader from '../../components/loader/loader';
+import MyListBtn from '../../components/my-list-btn/my-list-btn';
 
 const MoviePage: FC = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -52,6 +53,15 @@ const MoviePage: FC = () => {
       });
   }, [id]);
 
+  const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!film) {
+      return;
+    }
+
+    dispatch(redirectToRoute(`/player/${film.id}`));
+  };
+
   if (!dataLoaded) {
     return <Loader />;
   }
@@ -81,19 +91,13 @@ const MoviePage: FC = () => {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={handlePlayeBtnClick}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                {film && <MyListBtn filmId={film.id} /> }
                 {
                   authorizationStatus === AuthorizationStatus.Auth &&
                   <a href={id ? `/films/${id}/review` : '#'} className="btn film-card__button">Add review</a>

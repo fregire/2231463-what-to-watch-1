@@ -1,22 +1,24 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import ShowMore from '../../components/show-more/show-more';
 import { Film } from '../../types/film';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { ALL_GENRES } from '../../const';
 import UserBlock from '../../components/user-block/user-block';
+import MyListBtn from '../../components/my-list-btn/my-list-btn';
+import { api } from '../../services/api';
+import { APIRoute } from '../../const';
+import { redirectToRoute } from '../../store/action';
 
-type Props = {
-  promoFilm: Film;
-}
 
 const SHOWED_FILMS_STEP = 8;
 
-const MainPage: FC<Props> = (props) => {
-  const { promoFilm } = props;
+const MainPage: FC = () => {
+  const [promoFilm, setPromoFilm] = useState<Film | null>(null);
   const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
   const { films, activeGenre } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
   const genres = [ALL_GENRES]
     .concat([...new Set(films.map((film) => film.genre))]);
   const filteredFilms = films
@@ -27,13 +29,33 @@ const MainPage: FC<Props> = (props) => {
     setShowedFilmsCount(showedFilmsCount + SHOWED_FILMS_STEP);
   };
 
+  const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!promoFilm) {
+      return;
+    }
+
+    dispatch(redirectToRoute(`/player/${promoFilm.id}`));
+  };
+
+  useEffect(() => {
+    const fetchPromoFilm = async () => {
+      const { data: actualPromoFilm } = await api.get<Film>(APIRoute.Promo);
+
+      setPromoFilm(actualPromoFilm);
+    };
+
+    fetchPromoFilm();
+  }, []);
+
   return (
     <>
       <section className="film-card">
         <div className="film-card__bg">
           <img
-            src={promoFilm.backgroundImage}
-            alt={promoFilm.name}
+            src={promoFilm?.backgroundImage}
+            alt={promoFilm?.name}
           />
         </div>
 
@@ -55,34 +77,31 @@ const MainPage: FC<Props> = (props) => {
           <div className="film-card__info">
             <div className="film-card__poster">
               <img
-                src={promoFilm.posterImage}
-                alt={promoFilm.name}
+                src={promoFilm?.posterImage}
+                alt={promoFilm?.name}
                 width="218"
                 height="327"
               />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{promoFilm.name}</h2>
+              <h2 className="film-card__title">{promoFilm?.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{promoFilm.genre}</span>
-                <span className="film-card__year">{promoFilm.released}</span>
+                <span className="film-card__genre">{promoFilm?.genre}</span>
+                <span className="film-card__year">{promoFilm?.released}</span>
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={handlePlayeBtnClick}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                {
+                  promoFilm
+                  && <MyListBtn filmId={promoFilm.id} />
+                }
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { Film } from '../types/film';
 import { User } from '../types/user';
 import { AuthData } from '../types/auth-data';
 import { APIRoute, AuthorizationStatus } from '../const';
-import { changeAuthorizationStatus, fillFilms, setDataLoadedStatus, setUser } from './action';
+import { changeAuthorizationStatus, fillFilms, setDataLoadedStatus, setFavoriteFilms, setUser } from './action';
 import { saveToken, dropToken } from '../services/token';
 
 export const fetchFilmsAction = createAsyncThunk<void, undefined, {
@@ -63,6 +63,20 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
     dispatch(changeAuthorizationStatus(AuthorizationStatus.NoAuth));
+    dispatch(setFavoriteFilms([]));
     dropToken();
+  }
+);
+
+
+export const fetchFavoriteFilms = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/fetchFavoriteFilms',
+  async (_arg, {dispatch, extra: api}) => {
+    const { data: favoriteFilms } = await api.get<Film[]>(APIRoute.Favorite);
+    dispatch(setFavoriteFilms(favoriteFilms));
   }
 );

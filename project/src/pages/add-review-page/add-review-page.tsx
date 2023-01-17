@@ -7,7 +7,7 @@ import { ReviewData } from '../../types/review-data';
 import { useAppDispatch } from '../../hooks';
 import { redirectToRoute } from '../../store/action';
 import { api } from '../../services/api';
-import AddReviewForm from '../../components/add-review/add-review';
+import AddReviewForm from '../../components/add-review-form/add-review-form';
 import UserBlock from '../../components/user-block/user-block';
 import Logo from '../../components/logo/logo';
 

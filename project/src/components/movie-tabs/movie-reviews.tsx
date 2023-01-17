@@ -13,7 +13,6 @@ const MovieReviews: FC<Props> = (props) => {
   return (
     <div className="film-card__reviews film-card__row">
       <div className="film-card__reviews-col">
-        {/* TODO: Разделить отзывы на две колонки */}
         {reviews.map((review) => <ReviewComponent key={review.id} review={review} />)}
       </div>
     </div>

@@ -15,23 +15,21 @@ import HsitoryRouter from '../history-router/history-router';
 import browserHistory from '../../browser-history';
 
 const App: FC = () => {
-  const { isDataLoaded, films, authorizationStatus } = useAppSelector((state) => state);
+  const { isDataLoaded, authorizationStatus } = useAppSelector((state) => state);
 
   if (!isDataLoaded){
     return <Loader />;
   }
 
-  const promoFilm = films[0];
-
   return (
     <HsitoryRouter history={browserHistory}>
       <Routes>
-        <Route path={AppRoute.Main} element={<MainPage promoFilm={promoFilm} />} />
+        <Route path={AppRoute.Main} element={<MainPage />} />
         <Route
           path={AppRoute.MyList}
           element={
             <PrivateRoute authorizationStatus={authorizationStatus}>
-              <MyListPage films={films} />
+              <MyListPage />
             </PrivateRoute>
           }
         />
@@ -45,7 +43,7 @@ const App: FC = () => {
             </PrivateRoute>
           }
         />
-        <Route path={AppRoute.Player} element={<PlayerPage film={films[0]} />} />
+        <Route path={AppRoute.Player} element={<PlayerPage />} />
         <Route path={AppRoute.Default} element={<NotFoundPage />} />
       </Routes>
     </HsitoryRouter>
