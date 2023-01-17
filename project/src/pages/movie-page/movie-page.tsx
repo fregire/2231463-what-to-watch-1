@@ -75,6 +75,15 @@ const MoviePage: FC = () => {
       });
   };
 
+  const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!film) {
+      return;
+    }
+
+    dispatch(redirectToRoute(`/player/${film.id}`));
+  };
+
   if (!dataLoaded) {
     return <Loader />;
   }
@@ -104,7 +113,7 @@ const MoviePage: FC = () => {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={handlePlayeBtnClick}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>

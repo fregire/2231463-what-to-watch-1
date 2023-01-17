@@ -3,7 +3,7 @@ import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import ShowMore from '../../components/show-more/show-more';
 import { Film } from '../../types/film';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { ALL_GENRES } from '../../const';
 import UserBlock from '../../components/user-block/user-block';
 import MyListBtn from '../../components/my-list-btn/my-list-btn';
@@ -11,6 +11,7 @@ import { api } from '../../services/api';
 import { APIRoute } from '../../const';
 import { store } from '../../store';
 import { fetchFavoriteFilms } from '../../store/api-actions';
+import { redirectToRoute } from '../../store/action';
 
 
 const SHOWED_FILMS_STEP = 8;
@@ -19,6 +20,7 @@ const MainPage: FC = () => {
   const [promoFilm, setPromoFilm] = useState<Film | null>(null);
   const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
   const { films, activeGenre, favoriteFilms } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
   const genres = [ALL_GENRES]
     .concat([...new Set(films.map((film) => film.genre))]);
   const filteredFilms = films
@@ -27,6 +29,15 @@ const MainPage: FC = () => {
 
   const handleMoreBtnClick = () => {
     setShowedFilmsCount(showedFilmsCount + SHOWED_FILMS_STEP);
+  };
+
+  const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!promoFilm) {
+      return;
+    }
+
+    dispatch(redirectToRoute(`/player/${promoFilm.id}`));
   };
 
   const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,7 +113,7 @@ const MainPage: FC = () => {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={handlePlayeBtnClick}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
