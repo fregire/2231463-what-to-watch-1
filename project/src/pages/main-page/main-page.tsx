@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import ShowMore from '../../components/show-more/show-more';
@@ -12,14 +12,11 @@ import { APIRoute } from '../../const';
 import { store } from '../../store';
 import { fetchFavoriteFilms } from '../../store/api-actions';
 
-type Props = {
-  promoFilm: Film;
-}
 
 const SHOWED_FILMS_STEP = 8;
 
-const MainPage: FC<Props> = (props) => {
-  const [promoFilm, setPromoFilm] = useState(props.promoFilm);
+const MainPage: FC = () => {
+  const [promoFilm, setPromoFilm] = useState<Film | null>(null);
   const [showedFilmsCount, setShowedFilmsCount] = useState(SHOWED_FILMS_STEP);
   const { films, activeGenre, favoriteFilms } = useAppSelector((state) => state);
   const genres = [ALL_GENRES]
@@ -35,6 +32,10 @@ const MainPage: FC<Props> = (props) => {
   const handleMyListClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    if (!promoFilm){
+      return;
+    }
+
     const changeFilmFavoriteStatus = async () => {
       const { data: changedFilm } = await api.post<Film>(`${APIRoute.Favorite}/${promoFilm.id}/${promoFilm.isFavorite ? 0 : 1}`);
 
@@ -48,13 +49,23 @@ const MainPage: FC<Props> = (props) => {
       });
   };
 
+  useEffect(() => {
+    const fetchPromoFilm = async () => {
+      const { data: actualPromoFilm } = await api.get<Film>(APIRoute.Promo);
+
+      setPromoFilm(actualPromoFilm);
+    };
+
+    fetchPromoFilm();
+  }, []);
+
   return (
     <>
       <section className="film-card">
         <div className="film-card__bg">
           <img
-            src={promoFilm.backgroundImage}
-            alt={promoFilm.name}
+            src={promoFilm?.backgroundImage}
+            alt={promoFilm?.name}
           />
         </div>
 
@@ -76,18 +87,18 @@ const MainPage: FC<Props> = (props) => {
           <div className="film-card__info">
             <div className="film-card__poster">
               <img
-                src={promoFilm.posterImage}
-                alt={promoFilm.name}
+                src={promoFilm?.posterImage}
+                alt={promoFilm?.name}
                 width="218"
                 height="327"
               />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{promoFilm.name}</h2>
+              <h2 className="film-card__title">{promoFilm?.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{promoFilm.genre}</span>
-                <span className="film-card__year">{promoFilm.released}</span>
+                <span className="film-card__genre">{promoFilm?.genre}</span>
+                <span className="film-card__year">{promoFilm?.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -97,7 +108,10 @@ const MainPage: FC<Props> = (props) => {
                   </svg>
                   <span>Play</span>
                 </button>
-                <MyListBtn isFavorite={promoFilm.isFavorite} onClick={handleMyListClick} filmsCount={favoriteFilms.length} />
+                {
+                  promoFilm
+                  && <MyListBtn isFavorite={promoFilm.isFavorite} onClick={handleMyListClick} filmsCount={favoriteFilms.length} />
+                }
               </div>
             </div>
           </div>

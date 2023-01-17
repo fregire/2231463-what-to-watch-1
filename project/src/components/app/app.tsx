@@ -21,12 +21,11 @@ const App: FC = () => {
     return <Loader />;
   }
 
-  const promoFilm = films[0];
 
   return (
     <HsitoryRouter history={browserHistory}>
       <Routes>
-        <Route path={AppRoute.Main} element={<MainPage promoFilm={promoFilm} />} />
+        <Route path={AppRoute.Main} element={<MainPage />} />
         <Route
           path={AppRoute.MyList}
           element={
