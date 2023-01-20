@@ -11,7 +11,7 @@ import { AppRoute } from '../../const';
 import PrivateRoute from '../private-route/private-route';
 import { useAppSelector } from '../../hooks/index';
 import Loader from '../loader/loader';
-import HsitoryRouter from '../history-router/history-router';
+import HistoryRouter from '../history-router/history-router';
 import browserHistory from '../../browser-history';
 
 const App: FC = () => {
@@ -22,7 +22,7 @@ const App: FC = () => {
   }
 
   return (
-    <HsitoryRouter history={browserHistory}>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route path={AppRoute.Main} element={<MainPage />} />
         <Route
@@ -46,7 +46,7 @@ const App: FC = () => {
         <Route path={AppRoute.Player} element={<PlayerPage />} />
         <Route path={AppRoute.Default} element={<NotFoundPage />} />
       </Routes>
-    </HsitoryRouter>
+    </HistoryRouter>
   );
 };
 

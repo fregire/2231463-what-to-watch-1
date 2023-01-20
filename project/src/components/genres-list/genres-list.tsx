@@ -23,7 +23,7 @@ const GenreItem: FC<GenreItemProps> = (props) => {
 
   return (
     <li className={`catalog__genres-item ${isActive ? ' catalog__genres-item--active' : ''}`}>
-      <a href='#' className='catalog__genres-link' onClick={handleLinkClick}>{genre}</a>
+      <a href='#!' className='catalog__genres-link' onClick={handleLinkClick}>{genre}</a>
     </li>
   );
 };

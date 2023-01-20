@@ -66,7 +66,7 @@ const AddReviewPage: FC = () => {
                 <a href={id ? `/films/${id}` : '#'} className="breadcrumbs__link">{film?.name}</a>
               </li>
               <li className="breadcrumbs__item">
-                <a className="breadcrumbs__link">Add review</a>
+                <a href="#!" className="breadcrumbs__link">Add review</a>
               </li>
             </ul>
           </nav>

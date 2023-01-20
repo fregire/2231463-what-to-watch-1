@@ -51,7 +51,7 @@ const MoviePage: FC = () => {
           dispatch(redirectToRoute(AppRoute.NotFound));
         }
       });
-  }, [id]);
+  }, [id, dispatch]);
 
   const handlePlayeBtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -122,7 +122,7 @@ const MoviePage: FC = () => {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          {similarFilms && <FilmsList films={similarFilms} />}
+          {similarFilms && <FilmsList films={similarFilms.slice(0, 4)} />}
         </section>
 
         <footer className="page-footer">

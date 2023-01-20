@@ -1,23 +1,26 @@
-import { FC, FormEvent, useRef } from 'react';
+import { FC, FormEvent, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
 import Logo from '../../components/logo/logo';
+import { redirectToRoute } from '../../store/action';
 
 const SignInPage: FC = () => {
   const { authorizationStatus } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  if (authorizationStatus === AuthorizationStatus.Auth){
-    navigate(AppRoute.Main);
-  }
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth){
+      navigate(AppRoute.Main);
+    }
+  });
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
-  const dispatch = useAppDispatch();
 
   const isPasswordValid = (password: string) => password.match(/\w/) && password.match(/\d/);
 
@@ -30,6 +33,7 @@ const SignInPage: FC = () => {
         login: loginRef.current.value,
         password: passwordRef.current.value
       }));
+      dispatch(redirectToRoute(AppRoute.Main));
     }
   };
 

@@ -39,24 +39,23 @@ const FilmCard: FC<Props> = (props) => {
       }}
       onMouseLeave={handleFilmCardMouseLeave}
     >
-      <div className="small-film-card__image">
-        <VideoPlayer
-          width={280}
-          height={175}
-          poster={film.previewImage}
-          muted
-          src={film.videoLink}
-          isPlaying={isVideoPlaying}
-        />
-      </div>
-      <h3 className="small-film-card__title">
-        <Link
-          to={getFilmUrl(film)}
-          className="small-film-card__link"
-        >
-          {film.name}
-        </Link>
-      </h3>
+      <Link to={getFilmUrl(film)} className="small-film-card__link">
+        <div className="small-film-card__image">
+          <VideoPlayer
+            width={280}
+            height={175}
+            poster={film.previewImage}
+            muted
+            src={film.videoLink}
+            isPlaying={isVideoPlaying}
+          />
+        </div>
+        <h3 className="small-film-card__title">
+          <span className="small-film-card__link">
+            {film.name}
+          </span>
+        </h3>
+      </Link>
     </article>
   );
 };
