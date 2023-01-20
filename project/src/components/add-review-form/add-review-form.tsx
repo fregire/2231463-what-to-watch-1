@@ -27,7 +27,7 @@ const AddReviewForm: FC<Props> = (props) => {
     setRating(newRating);
   };
 
-  const isSubmitButtonDisabled = reviewText.length < 50 || reviewText.length > 400 || disabled;
+  const isSubmitButtonDisabled = reviewText.length < 50 || reviewText.length > 400 || disabled || rating === 0;
 
   const ratings: JSX.Element[] = [...Array(MAX_RATING)] // eslint-disable-line @typescript-eslint/no-unsafe-assignment
     .map((_, idx) =>

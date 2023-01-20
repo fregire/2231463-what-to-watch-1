@@ -8,7 +8,7 @@ type Props = {
   children?: React.ReactNode;
 }
 
-const HsitoryRouter: FC<Props> = (props) => {
+const HistoryRouter: FC<Props> = (props) => {
   const { history, basename, children } = props;
   const [state, setState] = useState({ action: history.action, location: history.location });
 
@@ -26,4 +26,4 @@ const HsitoryRouter: FC<Props> = (props) => {
   );
 };
 
-export default HsitoryRouter;
+export default HistoryRouter;

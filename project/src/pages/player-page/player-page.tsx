@@ -8,7 +8,7 @@ const PlayerPage: FC = () => {
   const { id } = useParams();
   const [film, setFilm] = useState<Film | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(0.0001);
   const videoPlayerRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setPlaying] = useState<boolean>(true);
 
@@ -38,11 +38,14 @@ const PlayerPage: FC = () => {
 
       const { data: filmInfo } = await api.get<Film>(`/films/${id}`);
 
-      setFilm(filmInfo);
+      return filmInfo;
     };
 
-    fetchFilm();
-  }, []);
+    fetchFilm()
+      .then((filmInfo) => {
+        setFilm(filmInfo);
+      });
+  }, [id]);
 
 
   const handlePlayPauseButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {

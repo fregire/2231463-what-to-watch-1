@@ -28,7 +28,7 @@ const AuthedUserBlock: FC<AuthedUserBlockProps> = (props) => {
         </div>
       </li>
       <li className="user-block__item">
-        <a className="user-block__link" onClick={handleSignOutClick}>Sign out</a>
+        <a href="#!" className="user-block__link" onClick={handleSignOutClick}>Sign out</a>
       </li>
     </>
   );

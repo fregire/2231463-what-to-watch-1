@@ -12,7 +12,7 @@ const MovieTabItem: FC<Props> = (props) => {
   return (
     <li className={`film-nav__item ${isActive ? 'film-nav__item--active' : ''}`}>
       <a
-        href="#"
+        href="#!"
         className="film-nav__link"
         onClick={
           (e) => {
